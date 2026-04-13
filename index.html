@@ -2,476 +2,221 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <title>电势转换工具 | Potential Converter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>专业电势转换工具 | Professional Potential Converter</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
-        :root {
-            --primary: #165DFF;
-            --primary-light: #E8F3FF;
-            --secondary: #36CFC9;
-            --gray-100: #F5F7FA;
-            --gray-200: #E5E6EB;
-            --gray-300: #C9CDD4;
-            --gray-600: #4E5969;
-            --gray-800: #1D2129;
-            --white: #FFFFFF;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--gray-100);
-            color: var(--gray-800);
-            line-height: 1.5;
-            padding: 2rem 0;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .header h1 {
-            color: var(--gray-800);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .header p {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--gray-800);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-group label {
-            font-size: 0.9rem;
-            color: var(--gray-600);
-            font-weight: 500;
-        }
-
-        .form-control {
-            padding: 0.9rem 1rem;
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn {
-            padding: 0.9rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: var(--white);
-            flex: 1;
-        }
-
-        .btn-primary:hover {
-            background: #0F4CD2;
-        }
-
-        .btn-export {
-            background: var(--secondary);
-            color: var(--white);
-            flex: 1;
-        }
-
-        .btn-export:hover {
-            background: #2FB8B2;
-        }
-
-        .unit-switch {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            padding: 0.8rem;
-            background: var(--gray-100);
-            border-radius: 8px;
-        }
-
-        .unit-switch label {
-            font-size: 0.9rem;
-            color: var(--gray-600);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .unit-switch input[type=radio] {
-            width: auto;
-            accent-color: var(--primary);
-        }
-
-        .result-section {
-            background: var(--primary-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .result-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        .result-table th,
-        .result-table td {
-            padding: 0.8rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .result-table th {
-            color: var(--gray-600);
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        .result-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .result-table .value {
-            font-weight: 600;
-            color: var(--gray-800);
-        }
-
-        .formula-section {
-            background: var(--gray-100);
-            border-radius: 8px;
-            padding: 1.2rem;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9rem;
-            color: var(--gray-800);
-            margin-bottom: 1.5rem;
-            overflow-x: auto;
-        }
-
-        .note-section {
-            font-size: 0.85rem;
-            color: var(--gray-600);
-            line-height: 1.6;
-        }
-
-        .note-section ul {
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .icon {
-            font-size: 1.1rem;
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .card {
-                padding: 1.5rem;
-            }
-        }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui, -apple-system, sans-serif;}
+        body{max-width:900px;margin:2rem auto;padding:0 1rem;line-height:1.6;background:#f7f9fa;}
+        .card{background:white;padding:1.8rem;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:1.5rem;}
+        h1{color:#1e293b;text-align:center;margin-bottom:0.5rem;}
+        .subtitle{text-align:center;color:#64748b;margin-bottom:2rem;}
+        .unit-switch{display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.5rem;background:#e2e8f0;padding:0.3rem;border-radius:10px;width:fit-content;margin-left:auto;margin-right:auto;}
+        .unit-btn{padding:0.5rem 1.2rem;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:0.95rem;color:#475569;transition:all 0.2s;}
+        .unit-btn.active{background:#2563eb;color:white;box-shadow:0 2px 8px rgba(37,99,235,0.3);}
+        .form-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:1.2rem;margin-bottom:1.5rem;}
+        .form-group{display:flex;flex-direction:column;gap:0.5rem;}
+        label{font-weight:500;color:#334155;font-size:0.95rem;}
+        input,select{padding:0.9rem;border:1px solid #e2e8f0;border-radius:10px;font-size:1rem;transition:border 0.2s;}
+        input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        .btn-group{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+        .btn-primary{background:#2563eb;color:white;border:none;padding:1rem;border-radius:10px;font-size:1rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+        .btn-primary:hover{background:#1d4ed8;}
+        .btn-secondary{background:#0d9488;color:white;border:none;padding:1rem;border-radius:10px;font-size:1rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+        .btn-secondary:hover{background:#0f766e;}
+        .result-card{background:#eff6ff;border-radius:12px;padding:1.5rem;}
+        .result-card h2{color:#1e40af;margin-bottom:1rem;font-size:1.1rem;}
+        .result-table{width:100%;border-collapse:collapse;}
+        .result-table th,.result-table td{padding:0.8rem;text-align:left;border-bottom:1px solid #dbeafe;}
+        .result-table th{color:#475569;font-weight:500;}
+        .result-table td{color:#1e293b;}
+        .result-table .value{font-weight:600;color:#1e40af;}
+        .formula-note{margin-top:1.5rem;padding:1rem;background:#f8fafc;border-radius:8px;color:#64748b;font-size:0.9rem;}
+        .note{text-align:center;color:#94a3b8;font-size:0.85rem;margin-top:2rem;}
     </style>
-    <!-- 引入图标（国内镜像源，加载更快） -->
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>专业电势（电位）转换工具</h1>
-            <p>适用于电催化、电化学测试 | 支持多参比电极同步转换 | 25℃标准校准</p>
+
+<h1>电势（电位）转换工具</h1>
+<p class="subtitle">不同参比电极、不同pH值的电势一键互转 | 25℃标准条件</p>
+
+<div class="unit-switch">
+    <button class="unit-btn active" onclick="switchUnit('V')" id="btnV">单位: V (伏特)</button>
+    <button class="unit-btn" onclick="switchUnit('mV')" id="btnmV">单位: mV (毫伏)</button>
+</div>
+
+<div class="card">
+    <div class="form-grid">
+        <div class="form-group">
+            <label>输入电位值</label>
+            <input type="number" id="potential" step="0.001" value="0.0" placeholder="输入电位">
         </div>
-
-        <div class="card">
-            <div class="card-title">输入参数</div>
-            <div class="unit-switch">
-                <label>
-                    <input type="radio" name="unit" value="V" checked> 单位：V（伏特）
-                </label>
-                <label>
-                    <input type="radio" name="unit" value="mV"> 单位：mV（毫伏）
-                </label>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="potential">输入电位值</label>
-                    <input type="number" id="potential" class="form-control" step="0.001" value="0.1" required>
-                </div>
-                <div class="form-group">
-                    <label for="fromRef">原始参比电极</label>
-                    <select id="fromRef" class="form-control">
-                        <option value="SHE">SHE / NHE (标准氢电极)</option>
-                        <option value="SCE" selected>SCE (饱和甘汞电极)</option>
-                        <option value="AgAgCl">Ag/AgCl (饱和 KCl)</option>
-                        <option value="HgHgO_01">Hg/HgO (0.1 M NaOH)</option>
-                        <option value="HgHgO_10">Hg/HgO (1.0 M NaOH)</option>
-                        <option value="HgHgSO4">Hg/HgSO₄ (饱和 K₂SO₄)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="pH">溶液 pH (仅 RHE 转换需要)</label>
-                    <input type="number" id="pH" class="form-control" step="0.1" value="7.0" required>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="calculate()">
-                    <i class="fas fa-calculator icon"></i> 开始转换
-                </button>
-                <button class="btn btn-export" onclick="exportData()" id="exportBtn" disabled>
-                    <i class="fas fa-download icon"></i> 导出数据
-                </button>
-            </div>
-
-            <div class="result-section" id="resultSection" style="display: none;">
-                <div class="result-title">转换结果（同步显示所有参比电极电位）</div>
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th>参比电极</th>
-                            <th>转换后电位</th>
-                            <th>计算说明</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultTableBody">
-                        <!-- 结果将通过JS动态插入 -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="formula-section">
-                通用换算公式（25℃）：E(目标) = E(原始) + E<sub>原始 vs SHE</sub> - E<sub>目标 vs SHE</sub><br>
-                RHE 专用公式（25℃）：E<sub>RHE</sub> = E<sub>参比</sub> + E<sub>参比 vs SHE</sub> + 0.0592 × pH<br>
-                单位换算：1 V = 1000 mV，转换时自动同步单位
-            </div>
-
-            <div class="note-section">
-                <p>⚠️ 说明：本工具基于25℃标准电位常数编写，仅供科研学习使用，实际应用请结合实验条件校准。</p>
-                <p>标准电位（vs SHE, 25℃）：</p>
-                <ul>
-                    <li>SHE / NHE：0.000 V</li>
-                    <li>SCE (饱和甘汞电极)：+0.241 V</li>
-                    <li>Ag/AgCl (饱和 KCl)：+0.197 V</li>
-                    <li>Hg/HgO (0.1 M NaOH)：+0.165 V</li>
-                    <li>Hg/HgO (1.0 M NaOH)：+0.098 V</li>
-                    <li>Hg/HgSO₄ (饱和 K₂SO₄)：+0.640 V</li>
-                </ul>
-            </div>
+        <div class="form-group">
+            <label>原始参比电极</label>
+            <select id="fromRef">
+                <option value="SHE">SHE / NHE (标准氢电极)</option>
+                <option value="SCE">SCE (饱和甘汞电极)</option>
+                <option value="AgAgCl">Ag/AgCl (饱和 KCl)</option>
+                <option value="HgHgO_01M">Hg/HgO (0.1 M NaOH)</option>
+                <option value="HgHgO_1M" selected>Hg/HgO (1.0 M NaOH)</option>
+                <option value="HgHgSO4">Hg/HgSO₄ (饱和 K₂SO₄)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>溶液 pH (仅 RHE 转换需要)</label>
+            <input type="number" id="pH" step="0.1" value="14.0" placeholder="输入pH">
         </div>
     </div>
 
-    <script>
-        // 各参比电极相对于 SHE 的电势 (25℃，权威公开数据)
-        const refPotential = {
-            SHE: { name: 'SHE / NHE (标准氢电极)', value: 0.000 },
-            SCE: { name: 'SCE (饱和甘汞电极)', value: 0.241 },
-            AgAgCl: { name: 'Ag/AgCl (饱和 KCl)', value: 0.197 },
-            HgHgO_01: { name: 'Hg/HgO (0.1 M NaOH)', value: 0.165 },
-            HgHgO_10: { name: 'Hg/HgO (1.0 M NaOH)', value: 0.098 },
-            HgHgSO4: { name: 'Hg/HgSO₄ (饱和 K₂SO₄)', value: 0.640 },
-            RHE: { name: 'RHE (可逆氢电极)', value: null } // RHE 电位动态计算
-        };
+    <div class="btn-group">
+        <button class="btn-primary" onclick="calculate()">
+            <i class="fas fa-calculator"></i> 开始转换
+        </button>
+        <button class="btn-secondary" onclick="exportData()">
+            <i class="fas fa-download"></i> 导出数据
+        </button>
+    </div>
 
-        // 计算所有参比电极转换结果（含单位切换）
-        function calculate() {
-            const E_input = parseFloat(document.getElementById('potential').value);
-            const pH = parseFloat(document.getElementById('pH').value);
-            const fromKey = document.getElementById('fromRef').value;
-            const fromRef = refPotential[fromKey];
-            const unit = document.querySelector('input[name="unit"]:checked').value;
+    <div class="result-card" id="resultCard" style="display:none;">
+        <h2>转换结果 (同步显示所有参比电极电位)</h2>
+        <table class="result-table" id="resultTable">
+            <thead>
+                <tr>
+                    <th>参比电极</th>
+                    <th>转换后电位</th>
+                    <th>计算说明</th>
+                </tr>
+            </thead>
+            <tbody id="resultBody">
+            </tbody>
+        </table>
+    </div>
 
-            // 验证输入
-            if (isNaN(E_input) || isNaN(pH)) {
-                alert('请输入有效数字！');
-                return;
-            }
-            if (pH < 0 || pH > 14) {
-                alert('pH 值需在 0-14 范围内！');
-                return;
-            }
+    <div class="formula-note">
+        <strong>换算公式 (25℃):</strong><br>
+        普通互转: E(目标) = E(原始) + E<sub>原始 vs SHE</sub> - E<sub>目标 vs SHE</sub><br>
+        RHE 转换: E<sub>RHE</sub> = E<sub>参比</sub> + E<sub>参比 vs SHE</sub> + 0.0592 × pH
+    </div>
+</div>
 
-            // 单位转换：统一转为V计算，最后再转回去
-            let E_input_V = E_input;
-            if (unit === 'mV') {
-                E_input_V = E_input / 1000;
-            }
+<p class="note">本工具仅使用公开电化学标准常数，仅供科研参考</p>
 
-            const E_from_vs_SHE = fromRef.value;
-            const resultBody = document.getElementById('resultTableBody');
-            resultBody.innerHTML = ''; // 清空历史结果
+<script>
+// 修正后的标准电势常数 (vs SHE, 25℃)，对齐原网站数值
+const refPotential = {
+    SHE: 0,
+    SCE: 0.241,
+    AgAgCl: 0.197,
+    HgHgO_01M: 0.165,
+    HgHgO_1M: 0.107, // 修正了这里！和原网站对齐
+    HgHgSO4: 0.640
+};
 
-            // 遍历所有参比电极，计算并插入结果
-            Object.entries(refPotential).forEach(([key, ref]) => {
-                let E_result_V, desc, E_result;
+const refNames = {
+    SHE: "SHE / NHE (标准氢电极)",
+    SCE: "SCE (饱和甘汞电极)",
+    AgAgCl: "Ag/AgCl (饱和 KCl)",
+    HgHgO_01M: "Hg/HgO (0.1 M NaOH)",
+    HgHgO_1M: "Hg/HgO (1.0 M NaOH)",
+    HgHgSO4: "Hg/HgSO₄ (饱和 K₂SO₄)",
+    RHE: "RHE (可逆氢电极)"
+};
 
-                if (key === 'RHE') {
-                    // RHE 计算逻辑
-                    E_result_V = E_input_V + E_from_vs_SHE + 0.0592 * pH;
-                    desc = `${E_input_V.toFixed(3)} + ${E_from_vs_SHE.toFixed(3)} + 0.0592 × ${pH.toFixed(1)}`;
-                } else {
-                    // 普通参比电极互转
-                    const E_to_vs_SHE = ref.value;
-                    E_result_V = E_input_V + E_from_vs_SHE - E_to_vs_SHE;
-                    desc = `${E_input_V.toFixed(3)} + ${E_from_vs_SHE.toFixed(3)} - ${E_to_vs_SHE.toFixed(3)}`;
-                }
+let currentUnit = 'V';
+const unitRatio = { 'V': 1, 'mV': 1000 };
+const unitSuffix = { 'V': 'V', 'mV': 'mV' };
 
-                // 转换回选择的单位
-                if (unit === 'mV') {
-                    E_result = (E_result_V * 1000).toFixed(3);
-                } else {
-                    E_result = E_result_V.toFixed(3);
-                }
-
-                // 插入表格行
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${ref.name}</td>
-                    <td class="value">${E_result} ${unit}</td>
-                    <td>${desc}（单位：V）</td>
-                `;
-                resultBody.appendChild(row);
-            });
-
-            // 显示结果区，启用导出按钮
-            document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('exportBtn').disabled = false;
+function switchUnit(unit) {
+    currentUnit = unit;
+    document.getElementById('btnV').classList.toggle('active', unit === 'V');
+    document.getElementById('btnmV').classList.toggle('active', unit === 'mV');
+    
+    // 转换输入框的数值
+    const input = document.getElementById('potential');
+    if(input.value) {
+        const val = parseFloat(input.value);
+        if(unit === 'mV') {
+            input.value = (val * 1000).toFixed(1);
+            input.step = 0.1;
+        } else {
+            input.value = (val / 1000).toFixed(3);
+            input.step = 0.001;
         }
+    }
+    
+    // 如果已经有结果，重新计算刷新单位
+    if(document.getElementById('resultCard').style.display !== 'none') {
+        calculate();
+    }
+}
 
-        // 导出数据（CSV格式，可直接用Excel打开，同步单位）
-        function exportData() {
-            const E_input = document.getElementById('potential').value;
-            const fromKey = document.getElementById('fromRef').value;
-            const fromName = refPotential[fromKey].name;
-            const pH = document.getElementById('pH').value;
-            const unit = document.querySelector('input[name="unit"]:checked').value;
-            const date = new Date().toLocaleString();
+function calculate() {
+    const E_input = parseFloat(document.getElementById('potential').value);
+    const pH = parseFloat(document.getElementById('pH').value);
+    const from = document.getElementById('fromRef').value;
+    
+    if (isNaN(E_input) || isNaN(pH)) {
+        alert('请输入有效数字！');
+        return;
+    }
 
-            // 表头
-            let csvContent = `电势转换结果,${date}\n`;
-            csvContent += `原始输入: ${E_input} ${unit} vs ${fromName},pH: ${pH}\n`;
-            csvContent += '参比电极,转换后电位,计算说明\n';
+    // 转换为V进行计算
+    const E_input_V = E_input / unitRatio[currentUnit];
+    const E_from_vs_SHE = refPotential[from];
+    const E_vs_SHE = E_input_V + E_from_vs_SHE;
 
-            // 遍历结果表格，提取数据
-            const rows = document.querySelectorAll('#resultTableBody tr');
-            rows.forEach(row => {
-                const columns = row.querySelectorAll('td');
-                const electrode = columns[0].textContent;
-                const potential = columns[1].textContent;
-                const desc = columns[2].textContent;
-                csvContent += `${electrode},${potential},${desc}\n`;
-            });
+    const resultBody = document.getElementById('resultBody');
+    resultBody.innerHTML = '';
 
-            // 创建下载链接
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', `电势转换结果_${date.replace(/\//g, '-').replace(/:/g, '-')}.csv`);
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
+    // 遍历所有参比，生成结果
+    for (const key in refPotential) {
+        const E_to_vs_SHE = refPotential[key];
+        const E_result_V = E_vs_SHE - E_to_vs_SHE;
+        const E_result = E_result_V * unitRatio[currentUnit];
+        
+        const desc = `${E_input_V.toFixed(3)} + ${E_from_vs_SHE} - ${E_to_vs_SHE} (单位: ${currentUnit})`;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${refNames[key]}</td>
+            <td class="value">${E_result.toFixed(3)} ${unitSuffix[currentUnit]}</td>
+            <td>${desc}</td>
+        `;
+        resultBody.appendChild(row);
+    }
 
-            // 清理
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            alert('数据导出成功！');
-        }
-    </script>
+    // 单独加RHE
+    const E_RHE_V = E_vs_SHE + 0.0592 * pH;
+    const E_RHE = E_RHE_V * unitRatio[currentUnit];
+    const descRHE = `${E_input_V.toFixed(3)} + ${E_from_vs_SHE} + 0.0592 × ${pH} (单位: ${currentUnit})`;
+    
+    const rowRHE = document.createElement('tr');
+    rowRHE.innerHTML = `
+        <td>${refNames.RHE}</td>
+        <td class="value">${E_RHE.toFixed(3)} ${unitSuffix[currentUnit]}</td>
+        <td>${descRHE}</td>
+    `;
+    resultBody.appendChild(rowRHE);
+
+    document.getElementById('resultCard').style.display = 'block';
+}
+
+function exportData() {
+    const rows = document.querySelectorAll('#resultBody tr');
+    let csv = '参比电极,转换后电位,计算说明\n';
+    rows.forEach(row => {
+        const cols = row.querySelectorAll('td');
+        csv += `${cols[0].textContent},${cols[1].textContent},${cols[2].textContent}\n`;
+    });
+    
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '电势转换结果.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>
